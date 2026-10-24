@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img width="540" height="140" alt="Image" src="https://raw.githubusercontent.com/flocsyc/HokenSync/426afcff8c61275f0e09c5e778fa9f021a694f66/logo.svg" />
+  <img width="540" height="140" alt="Image" src="https://raw.githubusercontent.com/flocsyc/HokenSync/572e27571f4e9842b0fb80adc3bae94995a20e36/logo.svg" />
 
 </div>
 
