@@ -1,0 +1,21 @@
+{
+    "id": "hokensync",
+    "name": "HokenSync",
+    "description": "Расширенные возможности работы с текстами песен, добавление собственных версий, редактирование существующих. Улучшенная работа поиска текстов к песням.",
+    "version": "1.0.0",
+    "author": "hoken",
+    "type": "script",
+    "image": "Assets/image.jpg",
+    "banner": "Assets/banner.png",
+    "libraryLogo": "Assets/image.jpg",
+    "css": "script.css",
+    "script": "script.js",
+    "tags": [
+        "lyrics",
+        "texts",
+        "lrclib"
+    ],
+    "dependencies": [],
+    "allowedUrls": [],
+    "supportedVersions": []
+}

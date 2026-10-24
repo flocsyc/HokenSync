@@ -1,0 +1,3336 @@
+/* =====================================================================
+   HokenSync — styles.css (редизайн)
+   Все id и классы сохранены. JS менять не нужно.
+   Палитру меняй только в блоке :root ниже.
+   ===================================================================== */
+
+:root {
+    --hs-bg: #0f1117;
+    --hs-surface: #151823;
+    --hs-raised: #1c2030;
+    --hs-hover: #252a3d;
+    --hs-line: rgba(255, 255, 255, .07);
+    --hs-line-strong: rgba(255, 255, 255, .13);
+
+    --hs-text: #eceef6;
+    --hs-muted: rgba(236, 238, 246, .62);
+    --hs-faint: rgba(236, 238, 246, .38);
+
+    --hs-accent: #9a88ff;
+    --hs-accent-ink: #0d0b1c;
+
+    --hs-ok: #5fd39a;
+    --hs-warn: #f0c36a;
+    --hs-bad: #ff6b7d;
+    --hs-info: #6ea8ff;
+
+    --hs-font: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --hs-mono: "JetBrains Mono", "Cascadia Mono", "Cascadia Code", Consolas, monospace;
+    --hs-ease: cubic-bezier(.16, 1, .3, 1);
+    --hs-col: 760px;
+}
+
+/* ============================= */
+/* Окно и шапка */
+/* ============================= */
+
+#hokensync-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(6, 7, 11, .68);
+    backdrop-filter: blur(4px);
+    font-family: var(--hs-font);
+    -webkit-font-smoothing: antialiased;
+}
+
+#hokensync-window {
+    position: relative;
+    width: min(920px, calc(100vw - 40px));
+    height: min(660px, calc(100vh - 40px));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--hs-line-strong);
+    border-radius: 20px;
+    background: var(--hs-bg);
+    color: var(--hs-text);
+    box-shadow: 0 30px 90px rgba(0, 0, 0, .65);
+    font-family: var(--hs-font);
+}
+
+#hokensync-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px 16px 28px;
+    border-bottom: 1px solid var(--hs-line);
+}
+
+#hokensync-header-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+#hokensync-title {
+    font-size: 17px;
+    font-weight: 650;
+    letter-spacing: -.01em;
+}
+
+#hokensync-subtitle {
+    margin-top: 4px;
+    overflow: hidden;
+    color: var(--hs-muted);
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hokensync-close {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--hs-muted);
+    font: inherit;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+}
+
+.hokensync-close:hover {
+    background: var(--hs-hover);
+    color: var(--hs-text);
+}
+
+.hokensync-close svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+}
+
+.hokensync-close:focus-visible {
+    outline: 2px solid var(--hs-accent);
+    outline-offset: 2px;
+}
+
+/* ============================= */
+/* Общая сетка экранов */
+/* Все экраны: одинаковые поля, колонка 760px, футер с кнопками внизу */
+/* ============================= */
+
+#hokensync-content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 22px 28px;
+    background: var(--hs-bg);
+}
+
+#hokensync-warning,
+#hokensync-library,
+#hokensync-done {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    width: min(var(--hs-col), 100%);
+    align-self: center;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+#hokensync-done-inner {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#hokensync-status {
+    width: min(var(--hs-col), 100%);
+    min-height: 22px;
+    align-self: center;
+    box-sizing: border-box;
+    margin: 0 0 12px;
+    color: var(--hs-muted);
+    font-size: 13.5px;
+    line-height: 1.45;
+}
+
+.hokensync-status-success { color: var(--hs-ok) !important; }
+.hokensync-status-error { color: var(--hs-bad) !important; }
+
+/* Единый футер: одинаковая ширина, отступ и разделитель на каждом экране */
+#hokensync-buttons,
+#hokensync-library-footer {
+    flex: 0 0 auto;
+    width: min(var(--hs-col), 100%);
+    align-self: center;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--hs-line);
+}
+
+#hokensync-library-footer { justify-content: flex-end; }
+
+/* ============================= */
+/* Кнопки */
+/* ============================= */
+
+.hokensync-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 38px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--hs-line-strong);
+    border-radius: 11px;
+    background: var(--hs-raised);
+    color: var(--hs-text);
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, color .15s ease, transform .1s ease;
+}
+
+.hokensync-btn:hover {
+    background: var(--hs-hover);
+    border-color: rgba(255, 255, 255, .22);
+}
+
+.hokensync-btn:active { transform: translateY(1px); }
+
+.hokensync-btn:focus-visible {
+    outline: 2px solid var(--hs-accent);
+    outline-offset: 2px;
+}
+
+.hokensync-btn:disabled {
+    opacity: .4;
+    cursor: default;
+    transform: none;
+}
+
+.hokensync-btn:disabled:hover {
+    background: var(--hs-raised);
+    border-color: var(--hs-line-strong);
+}
+
+.hokensync-btn.primary {
+    --hs-flow: linear-gradient(110deg,
+        var(--hs-accent) 0%,
+        color-mix(in srgb, var(--hs-accent) 48%, #fff) 45%,
+        var(--hs-accent) 100%) 0 0 / 200% 100%;
+    position: relative;
+    overflow: hidden;
+    border-color: transparent;
+    background: var(--hs-flow);
+    color: var(--hs-accent-ink);
+    animation: hs-tab-flow 5s linear infinite, hs-btn-glow 3s ease-in-out infinite;
+}
+
+.hokensync-btn.primary:hover {
+    border-color: transparent;
+    background: var(--hs-flow);
+    filter: brightness(1.08);
+}
+
+/* Блик пробегает по кнопке, как по выбранному столбику. */
+.hokensync-btn.primary::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    bottom: -40%;
+    left: 0;
+    width: 38%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .5), transparent);
+    transform: translateX(-160%) skewX(-20deg);
+    pointer-events: none;
+    animation: hs-tab-sheen 3.6s ease-in-out infinite;
+}
+
+/* Неактивная кнопка не переливается. */
+.hokensync-btn.primary:disabled,
+.hokensync-btn.primary:disabled::after { animation: none; }
+
+.hokensync-btn.primary:disabled:hover { filter: none; }
+
+@keyframes hs-btn-glow {
+    0%, 100% { box-shadow: 0 2px 12px color-mix(in srgb, var(--hs-accent) 30%, transparent); }
+    50% { box-shadow: 0 3px 22px 1px color-mix(in srgb, var(--hs-accent) 55%, transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hokensync-btn.primary,
+    .hokensync-btn.primary::after { animation: none; }
+}
+
+.hokensync-btn.danger {
+    border-color: color-mix(in srgb, var(--hs-bad) 32%, transparent);
+    background: color-mix(in srgb, var(--hs-bad) 12%, var(--hs-raised));
+    color: #ffb7c0;
+}
+
+.hokensync-btn.danger:hover {
+    border-color: color-mix(in srgb, var(--hs-bad) 50%, transparent);
+    background: color-mix(in srgb, var(--hs-bad) 22%, var(--hs-raised));
+}
+
+.hokensync-btn.danger:disabled:hover {
+    border-color: color-mix(in srgb, var(--hs-bad) 32%, transparent);
+    background: color-mix(in srgb, var(--hs-bad) 12%, var(--hs-raised));
+}
+
+.hokensync-btn.break-edit,
+.hokensync-btn.hokensync-edit-text-btn {
+    border-color: color-mix(in srgb, var(--hs-accent) 38%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 14%, var(--hs-raised));
+    color: color-mix(in srgb, var(--hs-accent) 70%, #fff);
+}
+
+.hokensync-btn.break-edit:hover,
+.hokensync-btn.hokensync-edit-text-btn:hover {
+    border-color: color-mix(in srgb, var(--hs-accent) 60%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 24%, var(--hs-raised));
+}
+
+.hokensync-btn.ml-auto { margin-left: auto; }
+
+.hokensync-preview-toggle {
+    width: 150px;
+    min-width: 150px;
+    flex: 0 0 150px;
+}
+
+/* ============================= */
+/* Меню песни (warning) */
+/* ============================= */
+
+#hokensync-warning {
+    position: relative;
+    align-items: center;
+    text-align: center;
+}
+
+#hokensync-warning-icon {
+    width: 76px;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto 0 20px;
+    border: 1px solid color-mix(in srgb, var(--hs-accent) 30%, transparent);
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--hs-accent) 12%, var(--hs-surface));
+    color: var(--hs-accent);
+    font-size: 36px;
+}
+
+#hokensync-warning-title {
+    width: 100%;
+    color: var(--hs-text);
+    font-size: 23px;
+    font-weight: 650;
+    letter-spacing: -.01em;
+    line-height: 1.25;
+}
+
+#hokensync-warning-description {
+    width: 100%;
+    max-width: 520px;
+    margin-top: 10px;
+    color: var(--hs-muted);
+    font-size: 15px;
+    line-height: 1.55;
+}
+
+#hokensync-memory-status {
+    width: min(100%, 520px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 24px 0 0;
+    padding: 12px 18px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    font-size: 14.5px;
+    font-weight: 600;
+    transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+
+#hokensync-memory-icon {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    line-height: 1;
+}
+
+#hokensync-memory-icon svg { display: block; width: 20px; height: 20px; }
+
+.hokensync-memory-status { border: 1px solid transparent; }
+
+.hokensync-memory-status-saving {
+    position: relative;
+    border-color: color-mix(in srgb, var(--hs-warn) 26%, transparent);
+    background: color-mix(in srgb, var(--hs-warn) 9%, transparent);
+    color: var(--hs-warn);
+}
+
+.hokensync-memory-status-saved {
+    border-color: color-mix(in srgb, var(--hs-ok) 26%, transparent);
+    background: color-mix(in srgb, var(--hs-ok) 9%, transparent);
+    color: var(--hs-ok);
+}
+
+.hokensync-memory-status-empty,
+.hokensync-memory-status-not-required {
+    border-color: var(--hs-line);
+    background: var(--hs-surface);
+    color: var(--hs-muted);
+}
+
+.hokensync-memory-status-not-found {
+    border-color: color-mix(in srgb, var(--hs-bad) 26%, transparent);
+    background: color-mix(in srgb, var(--hs-bad) 9%, transparent);
+    color: var(--hs-bad);
+}
+
+/* Кнопка очистки сохранённых текстов: тихая иконка в углу колонки, без эмодзи */
+#hokensync-cache-clear-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--hs-faint);
+    font-size: 0;
+    gap: 0;
+}
+
+#hokensync-cache-clear-btn::before {
+    content: '';
+    width: 17px;
+    height: 17px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M5 7h14'/><path d='M9.5 7V4.8h5V7'/><path d='M6.6 7l.9 11.4a2 2 0 0 0 2 1.8h5a2 2 0 0 0 2-1.8L17.4 7'/><path d='M10.2 11v5.2M13.8 11v5.2'/></svg>") center / contain no-repeat;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M5 7h14'/><path d='M9.5 7V4.8h5V7'/><path d='M6.6 7l.9 11.4a2 2 0 0 0 2 1.8h5a2 2 0 0 0 2-1.8L17.4 7'/><path d='M10.2 11v5.2M13.8 11v5.2'/></svg>") center / contain no-repeat;
+}
+
+#hokensync-cache-clear-btn:hover {
+    border-color: color-mix(in srgb, var(--hs-bad) 34%, transparent);
+    background: color-mix(in srgb, var(--hs-bad) 14%, transparent);
+    color: #ffb7c0;
+}
+
+/* ============================= */
+/* Редактор текста */
+/* ============================= */
+
+#hokensync-textarea {
+    width: min(var(--hs-col), 100%);
+    flex: 1;
+    min-height: 0;
+    align-self: center;
+    resize: none;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 16px 18px;
+    border: 1px solid var(--hs-line-strong);
+    border-radius: 14px;
+    outline: none;
+    background: var(--hs-surface);
+    color: var(--hs-text);
+    caret-color: var(--hs-accent);
+    font: 14.5px/1.6 var(--hs-font);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+#hokensync-textarea:focus {
+    border-color: color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hs-accent) 16%, transparent);
+}
+
+#hokensync-textarea::placeholder { color: var(--hs-faint); }
+
+#hokensync-textarea[readonly] {
+    cursor: default;
+    caret-color: transparent;
+    color: var(--hs-muted);
+}
+
+#hokensync-textarea[readonly]:focus {
+    border-color: var(--hs-line-strong);
+    box-shadow: none;
+}
+
+#hokensync-resume {
+    width: min(var(--hs-col), 100%);
+    align-self: center;
+    box-sizing: border-box;
+    margin: 0 0 12px;
+    padding: 12px 14px;
+    border: 1px solid color-mix(in srgb, var(--hs-accent) 26%, transparent);
+    border-left: 3px solid var(--hs-accent);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--hs-accent) 7%, var(--hs-surface));
+    color: var(--hs-muted);
+    font-size: 13px;
+}
+
+.hokensync-resume-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* ============================= */
+/* Синхронизация */
+/* ============================= */
+
+#hokensync-sync-top {
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+#hokensync-current-time {
+    color: var(--hs-accent);
+    font-size: 42px;
+    font-weight: 650;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+#hokensync-progress {
+    margin-top: 8px;
+    color: var(--hs-faint);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+#hokensync-previous-line {
+    min-height: 26px;
+    color: var(--hs-faint);
+    font-size: 15px;
+    text-align: center;
+}
+
+#hokensync-main-line {
+    flex: 0 0 auto;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 48px;
+    box-sizing: border-box;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.28;
+    letter-spacing: -.01em;
+    text-align: center;
+}
+
+#hokensync-next-lines {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 56px;
+    text-align: center;
+    -webkit-mask-image: linear-gradient(#000 55%, transparent);
+    mask-image: linear-gradient(#000 55%, transparent);
+}
+
+.hokensync-next-line {
+    margin: 10px 0;
+    color: var(--hs-faint);
+    font-size: 17px;
+    line-height: 1.35;
+}
+
+#hokensync-sync-hint {
+    margin: 12px 0 16px;
+    color: var(--hs-faint);
+    font-size: 12.5px;
+    text-align: center;
+}
+
+/* ============================= */
+/* Экран проигрыша (раньше без стилей) */
+/* ============================= */
+
+#hokensync-break-current-time {
+    margin-top: auto;
+    color: var(--hs-accent);
+    font-size: 56px;
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: -.02em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+#hokensync-break-hint {
+    margin: 16px 0 0;
+    color: var(--hs-faint);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ============================= */
+/* Проверка */
+/* ============================= */
+
+#hokensync-review-line {
+    width: min(var(--hs-col), 100%);
+    margin: auto auto 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+#hokensync-review-status {
+    display: inline-flex;
+    min-height: 0;
+    margin-bottom: 18px;
+    padding: 5px 12px;
+    border: 1px solid var(--hs-line);
+    border-radius: 999px;
+    background: var(--hs-surface);
+    color: var(--hs-muted);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+#hokensync-review-text {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.28;
+    letter-spacing: -.01em;
+}
+
+#hokensync-review-context {
+    max-width: 640px;
+    margin: 12px auto 0;
+    color: var(--hs-muted);
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+#hokensync-review-time {
+    margin-top: 14px;
+    color: var(--hs-accent);
+    font-size: 20px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+#hokensync-review-help {
+    max-width: min(var(--hs-col), 100%);
+    align-self: center;
+    margin: 18px 0 0;
+    color: var(--hs-faint);
+    font-size: 12.5px;
+    line-height: 1.7;
+    text-align: center;
+}
+
+/* ============================= */
+/* Ресинк: список строк */
+/* ============================= */
+
+#hokensync-resync-list {
+    flex: 1;
+    min-height: 0;
+    width: min(var(--hs-col), 100%);
+    align-self: center;
+    box-sizing: border-box;
+    margin: 0 0 16px;
+    padding: 4px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid var(--hs-line);
+    border-radius: 14px;
+    background: var(--hs-surface);
+}
+
+.hokensync-resync-row {
+    display: grid;
+    grid-template-columns: 30px 78px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    transition: background .15s ease;
+}
+
+.hokensync-resync-row:hover { background: var(--hs-raised); }
+
+.hokensync-resync-row .hokensync-btn {
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+.hokensync-resync-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.hokensync-resync-time {
+    color: var(--hs-faint);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+.hokensync-resync-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--hs-text);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.hokensync-resync-edit,
+.hokensync-resync-delete { min-width: 88px; }
+
+.hokensync-resync-end {
+    margin-top: 4px;
+    color: var(--hs-accent);
+    font-size: 12.5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.hokensync-resync-break-row { background: color-mix(in srgb, var(--hs-accent) 7%, transparent); }
+
+.hokensync-resync-break-row .hokensync-resync-text {
+    position: relative;
+    padding-left: 22px;
+    color: var(--hs-muted);
+    font-weight: 600;
+}
+
+.hokensync-resync-break-row .hokensync-resync-text::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: -65%;
+    width: 12px;
+    height: 115%;
+    border-bottom: 2px solid color-mix(in srgb, var(--hs-accent) 40%, transparent);
+    border-left: 2px solid color-mix(in srgb, var(--hs-accent) 40%, transparent);
+    border-bottom-left-radius: 4px;
+    pointer-events: none;
+}
+
+/* ============================= */
+/* Готово */
+/* ============================= */
+
+#hokensync-done-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    text-align: center;
+}
+
+#hokensync-done-title::before {
+    content: '✓';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 14px;
+    border: 1px solid color-mix(in srgb, var(--hs-ok) 32%, transparent);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--hs-ok) 12%, transparent);
+    color: var(--hs-ok);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+#hokensync-done-text {
+    margin-top: 10px;
+    color: var(--hs-muted);
+    font-size: 14px;
+    line-height: 1.55;
+    text-align: center;
+}
+
+#hokensync-preview {
+    flex: 1;
+    min-height: 0;
+    margin: 20px 0 16px;
+    padding: 14px 16px;
+    overflow: auto;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    border: 1px solid var(--hs-line);
+    border-radius: 14px;
+    background: var(--hs-surface);
+    color: var(--hs-muted);
+    font: 13px/1.65 var(--hs-mono);
+    white-space: pre-wrap;
+}
+
+/* ============================= */
+/* Мои тексты */
+/* ============================= */
+
+#hokensync-library-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0 0 16px;
+}
+
+.hokensync-library-header-icon {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--hs-accent) 28%, transparent);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--hs-accent) 12%, var(--hs-surface));
+    color: var(--hs-accent);
+    font-size: 21px;
+}
+
+.hokensync-library-header-text { min-width: 0; flex: 1; }
+
+.hokensync-library-title {
+    color: var(--hs-text);
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -.01em;
+    line-height: 1.15;
+}
+
+.hokensync-library-description {
+    margin-top: 5px;
+    color: var(--hs-faint);
+    font-size: 13px;
+}
+
+.hokensync-library-count {
+    flex: 0 0 auto;
+    padding: 6px 12px;
+    border: 1px solid color-mix(in srgb, var(--hs-accent) 24%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--hs-accent) 12%, transparent);
+    color: var(--hs-accent);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.hokensync-library-search {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    height: 42px;
+    margin: 0 0 12px;
+    padding: 0 14px;
+    box-sizing: border-box;
+    border: 1px solid var(--hs-line-strong);
+    border-radius: 12px;
+    background: var(--hs-surface);
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.hokensync-library-search:focus-within {
+    border-color: color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hs-accent) 16%, transparent);
+}
+
+.hokensync-library-search-icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--hs-faint);
+}
+
+.hokensync-library-search-icon svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+.hokensync-library-search input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--hs-text);
+    caret-color: var(--hs-accent);
+    font: inherit;
+    font-size: 13.5px;
+}
+
+.hokensync-library-search input::placeholder { color: var(--hs-faint); }
+
+/* Поиск и значки копии данных в одной строке */
+.hokensync-library-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.hokensync-library-toolbar .hokensync-library-search {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+}
+
+.hokensync-btn.hokensync-library-tool {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    padding: 0;
+    border-radius: 12px;
+    background: var(--hs-surface);
+    color: var(--hs-muted);
+}
+
+.hokensync-btn.hokensync-library-tool:hover {
+    border-color: color-mix(in srgb, var(--hs-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 14%, transparent);
+    color: var(--hs-accent);
+}
+
+.hokensync-library-tool svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+#hokensync-saved-lyrics-list {
+    flex: 1;
+    min-height: 0;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 1px 2px 2px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.hokensync-saved-lyrics-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 62px;
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--hs-line);
+    border-radius: 13px;
+    background: var(--hs-surface);
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.hokensync-saved-lyrics-row:hover {
+    border-color: var(--hs-line-strong);
+    background: var(--hs-raised);
+}
+
+.hokensync-saved-lyrics-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 10px;
+    background: var(--hs-raised);
+    color: var(--hs-accent);
+    font-size: 17px;
+}
+
+.hokensync-saved-lyrics-icon img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hokensync-saved-lyrics-info { min-width: 0; flex: 1; }
+
+.hokensync-saved-lyrics-title {
+    overflow: hidden;
+    color: var(--hs-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hokensync-saved-lyrics-artist {
+    margin-top: 4px;
+    overflow: hidden;
+    color: var(--hs-faint);
+    font-size: 12px;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hokensync-btn.hokensync-saved-lyrics-download {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    padding: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--hs-muted);
+}
+
+.hokensync-btn.hokensync-saved-lyrics-download:hover {
+    border-color: color-mix(in srgb, var(--hs-accent) 40%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 14%, transparent);
+    color: var(--hs-accent);
+}
+
+.hokensync-saved-lyrics-download svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.hokensync-library-empty {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--hs-line-strong);
+    border-radius: 13px;
+    color: var(--hs-faint);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ============================= */
+/* Окно подтверждения удаления */
+/* Стили из JS заданы inline, поэтому здесь !important */
+/* ============================= */
+
+.hokensync-delete-modal {
+    background: rgba(5, 6, 10, .62) !important;
+    backdrop-filter: blur(6px) !important;
+}
+
+.hokensync-delete-modal-card {
+    border: 1px solid var(--hs-line-strong) !important;
+    border-radius: 20px !important;
+    background: var(--hs-raised) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .55) !important;
+}
+
+.hokensync-delete-modal-card > div:first-child {
+    border-color: color-mix(in srgb, var(--hs-bad) 30%, transparent) !important;
+    background: color-mix(in srgb, var(--hs-bad) 12%, transparent) !important;
+}
+
+.hokensync-countdown-text { display: inline-block; }
+.hokensync-countdown-tick { animation: hs-count-tick .45s var(--hs-ease); }
+.hokensync-countdown-complete { animation: hs-count-done .35s var(--hs-ease); }
+.hokensync-btn.hokensync-delete-ready { animation: hs-ready .5s ease-out; }
+
+/* ============================= */
+/* Toast */
+/* ============================= */
+
+#hokensync-toast-container {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    z-index: 2147483647;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(-50%);
+    pointer-events: none;
+    font-family: var(--hs-font);
+}
+
+/* Уведомление: слева невидимая ячейка под значок, справа заголовок сверху и описание снизу, крестик справа.
+   Фон — жидкое стекло с цветным градиентом по смыслу и медленным бликом. */
+.hokensync-toast {
+    --toast-color: var(--hs-ok);
+    position: relative;
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) 22px;
+    align-items: center;
+    column-gap: 12px;
+    width: 330px;
+    max-width: calc(100vw - 32px);
+    box-sizing: border-box;
+    padding: 12px 10px 14px 14px;
+    overflow: hidden;
+    pointer-events: auto;
+    border: 1px solid color-mix(in srgb, var(--toast-color) 34%, rgba(255, 255, 255, .1));
+    border-radius: 14px;
+    background:
+        linear-gradient(115deg,
+            color-mix(in srgb, var(--toast-color) 36%, transparent) 0%,
+            color-mix(in srgb, var(--toast-color) 10%, transparent) 55%,
+            transparent 100%),
+        rgba(22, 25, 38, .72);
+    backdrop-filter: blur(20px) saturate(1.6);
+    box-shadow:
+        0 14px 40px rgba(0, 0, 0, .45),
+        inset 0 1px 0 rgba(255, 255, 255, .14);
+    animation: hs-toast-rise .26s var(--hs-ease) both;
+}
+
+.hokensync-toast::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .13) 50%, transparent 65%);
+    background-size: 250% 100%;
+    background-position: 130% 0;
+    pointer-events: none;
+    animation: hs-toast-sheen 3.8s ease-in-out infinite;
+}
+
+.hokensync-toast-success { --toast-color: var(--hs-ok); }
+.hokensync-toast-error { --toast-color: var(--hs-bad); }
+.hokensync-toast-warning { --toast-color: var(--hs-warn); }
+.hokensync-toast-info { --toast-color: var(--hs-info); }
+.hokensync-toast-delete { --toast-color: #aab2cc; }
+
+.hokensync-toast-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    color: var(--toast-color);
+}
+
+.hokensync-toast-icon svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.hokensync-toast-body {
+    position: relative;
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.hokensync-toast-title {
+    color: var(--hs-text);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.hokensync-toast-text {
+    color: rgba(236, 238, 246, .66);
+    font-size: 12px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.hokensync-toast-close {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: rgba(236, 238, 246, .5);
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+}
+
+.hokensync-toast-close:hover {
+    background: rgba(255, 255, 255, .1);
+    color: var(--hs-text);
+}
+
+.hokensync-toast-close svg {
+    display: block;
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.hokensync-toast-progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--toast-color);
+    opacity: .8;
+    transform-origin: left center;
+    animation: hs-toast-progress 5s linear forwards;
+}
+
+.hokensync-toast-hiding { animation: hs-toast-fall .2s ease-in forwards; }
+
+@keyframes hs-toast-rise { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes hs-toast-fall { to { opacity: 0; transform: translateY(8px) scale(.98); } }
+@keyframes hs-toast-sheen { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+
+/* ============================= */
+/* Скроллбары */
+/* Только ::-webkit-scrollbar: в новых Chromium scrollbar-color отключает их */
+/* и ломает подсветку через .hokensync-scroll-visible */
+/* ============================= */
+
+:is(#hokensync-textarea, #hokensync-preview, #hokensync-resync-list, #hokensync-saved-lyrics-list)::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+:is(#hokensync-textarea, #hokensync-preview, #hokensync-resync-list, #hokensync-saved-lyrics-list)::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+:is(#hokensync-textarea, #hokensync-preview, #hokensync-resync-list, #hokensync-saved-lyrics-list)::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+:is(#hokensync-textarea, #hokensync-preview, #hokensync-resync-list, #hokensync-saved-lyrics-list)::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .12);
+    background-clip: padding-box;
+}
+
+:is(#hokensync-textarea, #hokensync-preview, #hokensync-resync-list, #hokensync-saved-lyrics-list)::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, .4);
+    background-clip: padding-box;
+}
+
+:is(#hokensync-textarea, #hokensync-preview, #hokensync-resync-list, #hokensync-saved-lyrics-list).hokensync-scroll-visible::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .32);
+    background-clip: padding-box;
+}
+
+/* ============================= */
+/* Анимации: короткие и без смещений. Размытия и подпрыгивания убраны */
+/* ============================= */
+
+#hokensync-overlay { animation: hs-fade-in .18s ease-out both; }
+#hokensync-window { animation: hs-window-in .26s var(--hs-ease) both; }
+#hokensync-overlay.hokensync-closing { animation: hs-fade-out .2s ease-in forwards; }
+.hokensync-closing #hokensync-window { animation: hs-window-out .2s ease-in forwards; }
+
+#hokensync-content > *,
+#hokensync-warning > *,
+#hokensync-done-inner > * { animation: hs-fade-in .18s ease-out both; }
+
+.hokensync-delete-modal,
+.hokensync-delete-modal-card { animation: hs-fade-in .16s ease both; }
+
+.hokensync-delete-modal.hokensync-modal-closing,
+.hokensync-delete-modal-card.hokensync-modal-card-closing { animation: hs-fade-out .12s ease forwards; }
+
+@property --hokensync-loading-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+}
+
+.hokensync-memory-status-saving::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: 12px;
+    background: conic-gradient(from var(--hokensync-loading-angle), transparent 0deg, transparent 325deg, rgba(255, 255, 255, .08) 338deg, rgba(255, 255, 255, .85) 351deg, rgba(255, 255, 255, .08) 358deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: hs-loading-border 3s linear infinite;
+}
+
+@keyframes hs-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hs-fade-out { to { opacity: 0; } }
+@keyframes hs-window-in { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes hs-window-out { to { opacity: 0; transform: translateY(6px) scale(.985); } }
+@keyframes hs-toast-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes hs-toast-out { to { opacity: 0; transform: translateY(6px); } }
+@keyframes hs-toast-progress { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@keyframes hs-loading-border { from { --hokensync-loading-angle: 0deg; } to { --hokensync-loading-angle: 360deg; } }
+@keyframes hs-count-tick { from { opacity: .3; transform: scale(1.3); } to { opacity: 1; transform: none; } }
+@keyframes hs-count-done { from { opacity: .3; transform: scale(.7); } to { opacity: 1; transform: none; } }
+@keyframes hs-ready { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hs-bad) 55%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+
+@media (prefers-reduced-motion: reduce) {
+    #hokensync-overlay,
+    #hokensync-overlay *,
+    .hokensync-toast,
+    .hokensync-toast * {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+
+    .hokensync-toast::before { animation: none; }
+    .hokensync-draft-dot { animation: none; }
+}
+
+/* ============================= */
+/* Подсказки к кнопкам («жидкое стекло») */
+/* ============================= */
+
+#hokensync-tooltip {
+    position: fixed;
+    z-index: 200000;
+    width: max-content;
+    max-width: 250px;
+    box-sizing: border-box;
+    padding: 9px 13px 10px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 14px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .04)),
+        rgba(34, 37, 56, .5);
+    backdrop-filter: blur(22px) saturate(1.7);
+    box-shadow:
+        0 14px 38px rgba(0, 0, 0, .45),
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        inset 0 -1px 0 rgba(255, 255, 255, .04);
+    opacity: 0;
+    transform: translateY(6px) scale(.97);
+    transition: opacity .16s ease, transform .24s var(--hs-ease);
+    pointer-events: none;
+}
+
+#hokensync-tooltip[data-placement="bottom"] { transform: translateY(-6px) scale(.97); }
+
+#hokensync-tooltip.hokensync-tooltip-visible {
+    opacity: 1;
+    transform: none;
+}
+
+.hokensync-tooltip-title {
+    color: var(--hs-text);
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.3;
+}
+
+.hokensync-tooltip-text {
+    margin-top: 3px;
+    color: var(--hs-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #hokensync-tooltip { transition: none; }
+}
+
+/* Перерисовка экрана разметки не должна заново проигрывать анимацию появления */
+#hokensync-content.hokensync-no-enter > * { animation: none; }
+
+/* ============================= */
+/* Меню песни: есть ли свой текст — видно сразу */
+/* ============================= */
+
+#hokensync-warning.hokensync-state-saved #hokensync-warning-icon {
+    border-color: color-mix(in srgb, var(--hs-ok) 42%, transparent);
+    background: color-mix(in srgb, var(--hs-ok) 18%, var(--hs-surface));
+    color: var(--hs-ok);
+}
+
+#hokensync-warning.hokensync-state-saved #hokensync-warning-title { color: var(--hs-ok); }
+
+#hokensync-warning.hokensync-state-native #hokensync-warning-icon,
+#hokensync-warning.hokensync-state-found #hokensync-warning-icon {
+    border-color: color-mix(in srgb, var(--hs-info) 40%, transparent);
+    background: color-mix(in srgb, var(--hs-info) 16%, var(--hs-surface));
+    color: var(--hs-info);
+}
+
+#hokensync-warning.hokensync-state-empty #hokensync-warning-icon {
+    border: 2px dashed var(--hs-line-strong);
+    background: transparent;
+    color: var(--hs-faint);
+}
+
+#hokensync-warning.hokensync-state-empty #hokensync-warning-title { color: var(--hs-muted); }
+
+/* Кнопка «Применить»: вместо символа ✓ нарисованная галочка */
+.hokensync-btn-apply::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12.5l4.5 4.5L19 7.5'/></svg>") center / contain no-repeat;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12.5l4.5 4.5L19 7.5'/></svg>") center / contain no-repeat;
+}
+
+/* ============================= */
+/* Значки меню песни: линиями, строго по центру плитки */
+/* ============================= */
+
+#hokensync-warning-icon svg {
+    display: block;
+    width: 34px;
+    height: 34px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Плашка «есть незавершённая работа»: тихо, в углу */
+.hokensync-draft-pill {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 10px;
+    border: 1px solid color-mix(in srgb, var(--hs-warn) 26%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--hs-warn) 8%, transparent);
+    color: color-mix(in srgb, var(--hs-warn) 80%, #fff);
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.hokensync-draft-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--hs-warn);
+    animation: hs-dot-pulse 2.4s ease-out infinite;
+}
+
+@keyframes hs-dot-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--hs-warn) 55%, transparent); }
+    70%, 100% { box-shadow: 0 0 0 7px transparent; }
+}
+
+/* ============================= */
+/* Поле ввода: слой подсветки частей + кнопка копирования */
+/* ============================= */
+
+.hokensync-textarea-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    width: min(var(--hs-col), 100%);
+    align-self: center;
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.hokensync-textarea-backdrop,
+.hokensync-textarea-wrap #hokensync-textarea {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 16px 48px 16px 18px;
+    border: 1px solid var(--hs-line-strong);
+    border-radius: 14px;
+    font: 14.5px/1.6 var(--hs-font);
+    letter-spacing: normal;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: normal;
+    tab-size: 4;
+    scrollbar-gutter: stable;
+}
+
+.hokensync-textarea-backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: var(--hs-surface);
+    color: var(--hs-text);
+    pointer-events: none;
+}
+
+.hokensync-textarea-backdrop::-webkit-scrollbar { width: 8px; height: 8px; }
+
+.hokensync-textarea-wrap #hokensync-textarea {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    color: transparent;
+}
+
+.hokensync-textarea-wrap #hokensync-textarea[readonly] { color: transparent; }
+.hokensync-textarea-wrap:has(#hokensync-textarea[readonly]) .hokensync-textarea-backdrop { color: var(--hs-muted); }
+
+.hokensync-textarea-wrap #hokensync-textarea::selection {
+    background: color-mix(in srgb, var(--hs-accent) 38%, transparent);
+    color: transparent;
+}
+
+.hokensync-hl-label {
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--hs-accent) 16%, transparent);
+    color: var(--hs-accent);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+.hokensync-copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 9px;
+    background: color-mix(in srgb, var(--hs-raised) 88%, transparent);
+    color: var(--hs-muted);
+}
+
+.hokensync-copy-btn:hover:not(:disabled) { color: var(--hs-text); }
+
+.hokensync-copy-btn:disabled {
+    opacity: .35;
+    pointer-events: none;
+}
+
+.hokensync-copy-btn svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ============================= */
+/* Правка строк: список ресинка и экран проверки */
+/* ============================= */
+
+.hokensync-resync-actions { flex-wrap: nowrap; }
+
+.hokensync-resync-tools {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 4px;
+}
+
+.hokensync-resync-row .hokensync-tool-btn,
+.hokensync-tool-btn {
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    padding: 0;
+    border-color: transparent;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--hs-muted);
+}
+
+.hokensync-tool-btn:hover {
+    border-color: var(--hs-line-strong);
+    background: var(--hs-hover);
+    color: var(--hs-text);
+}
+
+.hokensync-tool-btn.hokensync-tool-delete:hover {
+    border-color: color-mix(in srgb, var(--hs-bad) 40%, transparent);
+    background: color-mix(in srgb, var(--hs-bad) 16%, transparent);
+    color: #ffb7c0;
+}
+
+.hokensync-tool-btn svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.hokensync-resync-new { background: color-mix(in srgb, var(--hs-accent) 8%, transparent); }
+
+.hokensync-line-input {
+    width: 100%;
+    height: 34px;
+    box-sizing: border-box;
+    padding: 0 12px;
+    border: 1px solid color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    border-radius: 9px;
+    outline: none;
+    background: var(--hs-bg);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hs-accent) 16%, transparent);
+    color: var(--hs-text);
+    caret-color: var(--hs-accent);
+    font: inherit;
+    font-size: 14px;
+}
+
+.hokensync-line-input::placeholder { color: var(--hs-faint); }
+
+.hokensync-review-input {
+    height: 52px;
+    border-radius: 12px;
+    font-size: 24px;
+    font-weight: 650;
+    text-align: center;
+}
+
+#hokensync-review-tools {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+#hokensync-review-tools .hokensync-btn {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12.5px;
+}
+
+/* ============================= */
+/* Список таймкодов: номера, начало текста, метки частей */
+/* ============================= */
+
+.hokensync-resync-num {
+    color: var(--hs-faint);
+    font-size: 12px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Кнопка на всю ширину: новая строка в самое начало текста */
+.hokensync-resync-start {
+    width: 100%;
+    height: 36px;
+    margin: 0 0 4px;
+    gap: 8px;
+    border: 1px dashed var(--hs-line-strong);
+    background: transparent;
+    color: var(--hs-muted);
+    font-size: 13px;
+}
+
+.hokensync-resync-start:hover {
+    border-color: color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 9%, transparent);
+    color: var(--hs-accent);
+}
+
+.hokensync-resync-start-label {
+    position: relative;
+    display: inline-block;
+}
+
+.hokensync-resync-start svg {
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    margin-right: 8px;
+    transform: translateY(-50%);
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Метка части: значок, название, тонкая линия и инструменты (при наведении ярче) */
+.hokensync-resync-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 6px 4px 14px;
+    color: var(--hs-accent);
+}
+
+.hokensync-resync-section-icon svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.hokensync-resync-section-label {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.hokensync-resync-section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--hs-accent) 45%, transparent), transparent);
+}
+
+.hokensync-resync-section-tools {
+    display: flex;
+    gap: 2px;
+    opacity: .55;
+    transition: opacity .15s ease;
+}
+
+.hokensync-resync-section:hover .hokensync-resync-section-tools { opacity: 1; }
+
+.hokensync-resync-section .hokensync-tool-btn {
+    width: 26px;
+    min-width: 26px;
+    height: 26px;
+    flex: 0 0 26px;
+}
+
+/* «+» плавно поворачивается в крестик, пока открыто меню, и возвращается обратно */
+.hokensync-tool-add svg { transition: transform .26s var(--hs-ease); }
+.hokensync-tool-add.is-open svg { transform: rotate(45deg); }
+.hokensync-tool-add { transition: color .2s ease, background .2s ease, border-color .2s ease; }
+
+.hokensync-tool-add.is-open {
+    border-color: color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 20%, transparent);
+    color: var(--hs-accent);
+}
+
+/* ============================= */
+/* Меню выбора (метки частей, «+») — то же жидкое стекло, что у подсказок */
+/* ============================= */
+
+.hokensync-menu {
+    position: fixed;
+    z-index: 150000;
+    min-width: 200px;
+    box-sizing: border-box;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 14px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .04)),
+        rgba(30, 33, 50, .66);
+    backdrop-filter: blur(22px) saturate(1.7);
+    box-shadow:
+        0 14px 38px rgba(0, 0, 0, .45),
+        inset 0 1px 0 rgba(255, 255, 255, .2);
+    opacity: 0;
+    transform: translateY(6px) scale(.97);
+    transition: opacity .14s ease, transform .22s var(--hs-ease);
+}
+
+.hokensync-menu[data-placement="bottom"] { transform: translateY(-6px) scale(.97); }
+
+.hokensync-menu.hokensync-menu-visible {
+    opacity: 1;
+    transform: none;
+}
+
+.hokensync-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--hs-text);
+    font: inherit;
+    font-size: 13.5px;
+    text-align: left;
+    cursor: pointer;
+    transition: background .12s ease;
+}
+
+.hokensync-menu-item:hover { background: color-mix(in srgb, var(--hs-accent) 24%, transparent); }
+
+.hokensync-menu-num {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .08);
+    color: var(--hs-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.hokensync-menu-heading {
+    padding: 8px 12px 4px;
+    color: var(--hs-faint);
+    font-size: 12px;
+}
+
+.hokensync-menu-separator {
+    height: 1px;
+    margin: 5px 6px;
+    background: var(--hs-line);
+}
+
+.hokensync-tag-btn { gap: 7px; }
+
+.hokensync-tag-btn svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ============================= */
+/* Проверка: значки-инструменты в углу и пояснение конца строки */
+/* ============================= */
+
+#hokensync-review-line { position: relative; }
+
+.hokensync-review-toolbar {
+    position: absolute;
+    top: -8px;
+    right: 0;
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--hs-line);
+    border-radius: 12px;
+    background: var(--hs-surface);
+}
+
+#hokensync-review-note {
+    max-width: 520px;
+    margin: 16px auto 0;
+    color: var(--hs-faint);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ============================= */
+/* Кнопка HokenSync в панели плеера: акцентный цвет, чтобы её было видно */
+/* ============================= */
+
+[data-hokensync-open] svg {
+    filter: drop-shadow(0 0 3px rgba(255, 170, 80, .7));
+    transition: filter .2s ease, transform .2s ease;
+}
+
+[data-hokensync-open]:hover svg {
+    filter: brightness(1.3) drop-shadow(0 0 6px rgba(255, 210, 140, .95));
+    transform: scale(1.06);
+}
+
+/* ============================= */
+/* Подсвеченная строка после возврата из правки */
+/* ============================= */
+
+.hokensync-resync-row-flash { animation: hs-row-flash 1.4s ease-out; }
+
+@keyframes hs-row-flash {
+    0%, 35% { background: color-mix(in srgb, var(--hs-accent) 24%, transparent); }
+    100% { background: transparent; }
+}
+
+/* ============================= */
+/* Тумблер «Использовать свой текст» */
+/* ============================= */
+
+.hokensync-switch-row {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 8px 12px 8px 14px;
+    border: 1px solid var(--hs-line);
+    border-radius: 12px;
+    background: var(--hs-surface);
+    cursor: pointer;
+    user-select: none;
+}
+
+.hokensync-switch-text {
+    color: var(--hs-text);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.hokensync-switch-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.hokensync-switch-track {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    flex: 0 0 40px;
+    border-radius: 999px;
+    background: var(--hs-hover);
+    transition: background .2s ease;
+}
+
+.hokensync-switch-track::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+    transition: transform .22s var(--hs-ease);
+}
+
+.hokensync-switch-input:checked + .hokensync-switch-track { background: var(--hs-ok); }
+.hokensync-switch-input:checked + .hokensync-switch-track::after { transform: translateX(18px); }
+.hokensync-switch-input:focus-visible + .hokensync-switch-track { outline: 2px solid var(--hs-accent); outline-offset: 2px; }
+
+/* Свой текст отключён: значок и заголовок приглушены */
+#hokensync-warning.hokensync-state-off #hokensync-warning-icon {
+    border-color: var(--hs-line-strong);
+    background: transparent;
+    color: var(--hs-faint);
+}
+
+#hokensync-warning.hokensync-state-off #hokensync-warning-title { color: var(--hs-muted); }
+
+.hokensync-find-btn { gap: 7px; }
+
+.hokensync-find-btn svg {
+    display: block;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ============================= */
+/* Жидкое стекло: темнее, насыщеннее; светлое за стеклом проходит светом */
+/* ============================= */
+
+:root {
+    --hs-glass-bg: rgba(12, 13, 20, .38);
+    --hs-glass-blur: blur(14px) saturate(1.7) brightness(1.45) contrast(1.05);
+    --hs-glass-border: rgba(255, 255, 255, .15);
+    --hs-glass-edge:
+        inset 0 1px 0 rgba(255, 255, 255, .32),
+        inset 1px 0 0 rgba(255, 255, 255, .1),
+        inset 0 -1px 0 rgba(0, 0, 0, .45);
+}
+
+#hokensync-tooltip,
+.hokensync-menu {
+    isolation: isolate;
+    border-color: var(--hs-glass-border);
+    background: var(--hs-glass-bg);
+    backdrop-filter: var(--hs-glass-blur);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .5), var(--hs-glass-edge);
+}
+
+#hokensync-tooltip::before,
+.hokensync-menu::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(120% 90% at 0% 0%, rgba(255, 255, 255, .16), transparent 55%);
+    pointer-events: none;
+}
+
+.hokensync-toast {
+    border-color: color-mix(in srgb, var(--toast-color) 30%, rgba(255, 255, 255, .12));
+    background:
+        linear-gradient(115deg,
+            color-mix(in srgb, var(--toast-color) 26%, transparent) 0%,
+            color-mix(in srgb, var(--toast-color) 7%, transparent) 55%,
+            transparent 100%),
+        var(--hs-glass-bg);
+    backdrop-filter: var(--hs-glass-blur);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .5), var(--hs-glass-edge);
+}
+
+/* Горячие клавиши в подсказке: отдельными «клавишами» справа от заголовка */
+.hokensync-tooltip-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.hokensync-tooltip-keys {
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 3px;
+}
+
+.hokensync-tooltip-keys:empty { display: none; }
+
+.hokensync-tooltip-keys kbd {
+    min-width: 18px;
+    padding: 2px 6px;
+    border: 1px solid rgba(255, 255, 255, .24);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .13);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .4);
+    color: var(--hs-text);
+    font: 600 10.5px/1.25 var(--hs-font);
+    text-align: center;
+}
+
+/* Подсветка кнопок, пока открыто их меню («+», карандаш метки, «Метка», «Найти текст») */
+.hokensync-tool-btn.is-open,
+.hokensync-tag-btn.is-open,
+.hokensync-find-btn.is-open {
+    border-color: color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 20%, transparent);
+    color: var(--hs-accent);
+}
+
+.hokensync-tool-btn { transition: color .2s ease, background .2s ease, border-color .2s ease; }
+
+/* Тумблер своего текста: маленький, вверху слева (это дополнительная функция) */
+.hokensync-switch-row {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    margin: 0;
+    padding: 4px 10px 4px 12px;
+    gap: 10px;
+    background: transparent;
+}
+
+.hokensync-switch-text {
+    color: var(--hs-muted);
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.hokensync-switch-track {
+    width: 34px;
+    height: 19px;
+    flex: 0 0 34px;
+}
+
+.hokensync-switch-track::after {
+    top: 3px;
+    left: 3px;
+    width: 13px;
+    height: 13px;
+}
+
+.hokensync-switch-input:checked + .hokensync-switch-track::after { transform: translateX(15px); }
+
+/* «Добавить строку в начало»: текст ровно по центру по высоте букв, а не по строке шрифта */
+.hokensync-resync-start-label {
+    text-box: trim-both cap alphabetic;
+    transform: translateY(-1.3px);
+}
+
+/* Старый Chromium без text-box: поправка на смещение шрифта, замеренное на кнопке (2,5 px) */
+@supports not (text-box: trim-both cap alphabetic) {
+    .hokensync-resync-start-label { transform: translateY(-2.5px); }
+}
+
+/* Кнопка HokenSync в плеере всегда кликабельна, даже если соседняя кнопка текста у песни заблокирована */
+[data-hokensync-open] {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}
+
+/* Подсказка кнопки в плеере живёт вне нашего окна, поэтому шрифт задаём ей сам */
+#hokensync-tooltip { font-family: var(--hs-font); }
+
+/* ============================= */
+/* Баннер сверху (как «остров» на iPhone) */
+/* ============================= */
+
+#hokensync-banner-container {
+    position: fixed;
+    top: 52px;
+    right: 20px;
+    z-index: 2147483647;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    pointer-events: none;
+    font-family: var(--hs-font);
+}
+
+.hokensync-banner {
+    --banner-color: var(--hs-info);
+    --banner-progress: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: max-content;
+    min-width: 340px;
+    max-width: min(440px, calc(100vw - 32px));
+    min-height: 56px;
+    box-sizing: border-box;
+    padding: 10px 22px 10px 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .17);
+    border-radius: 28px;
+    background: rgba(18, 20, 31, .6);
+    backdrop-filter: blur(28px) saturate(1.8);
+    box-shadow:
+        0 16px 46px rgba(0, 0, 0, .5),
+        inset 0 1px 0 rgba(255, 255, 255, .22),
+        inset 0 -1px 0 rgba(255, 255, 255, .05);
+    color: var(--hs-text);
+    animation: hs-banner-drop .55s var(--hs-ease) both;
+}
+
+/* Блик стекла сверху */
+.hokensync-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .15), transparent 48%);
+    pointer-events: none;
+}
+
+.hokensync-banner[data-tone='warning'] { --banner-color: var(--hs-warn); }
+.hokensync-banner[data-tone='success'] { --banner-color: var(--hs-ok); }
+.hokensync-banner[data-tone='info'] { --banner-color: var(--hs-info); }
+
+/* Баннер без заливки: ровная подсветка цветом по смыслу */
+.hokensync-banner-plain {
+    background:
+        linear-gradient(115deg,
+            color-mix(in srgb, var(--banner-color) 30%, transparent) 0%,
+            color-mix(in srgb, var(--banner-color) 8%, transparent) 70%,
+            transparent 100%),
+        rgba(18, 20, 31, .6);
+}
+
+/* Заливка слева направо по мере прогресса */
+.hokensync-banner-fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+        color-mix(in srgb, var(--banner-color) 62%, transparent),
+        color-mix(in srgb, var(--banner-color) 30%, transparent));
+    transform: scaleX(var(--banner-progress));
+    transform-origin: left center;
+    transition: transform .9s cubic-bezier(.4, 0, .2, 1);
+    pointer-events: none;
+}
+
+.hokensync-banner-plain .hokensync-banner-fill { display: none; }
+
+.hokensync-banner-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    color: var(--banner-color);
+}
+
+.hokensync-banner-icon svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.hokensync-banner-body {
+    position: relative;
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.hokensync-banner-title {
+    color: var(--hs-text);
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hokensync-banner-text {
+    color: rgba(236, 238, 246, .72);
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-variant-numeric: tabular-nums;
+}
+
+.hokensync-banner-text[hidden] { display: none; }
+
+.hokensync-banner-hiding { animation: hs-banner-lift .3s ease-in forwards; }
+
+@keyframes hs-banner-drop {
+    from { opacity: 0; transform: translateY(-130%) scale(.86); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes hs-banner-lift {
+    to { opacity: 0; transform: translateY(-130%) scale(.9); }
+}
+
+/* ============================= */
+/* Вкладки редактора текста: «Свой текст» / «Найденный текст» */
+/* ============================= */
+
+/* Шапка: статус слева, вкладки справа. */
+.hokensync-editor-head {
+    width: min(var(--hs-col), 100%);
+    align-self: center;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 12px;
+}
+
+/* Шапка со вкладками не мигает при переключении. */
+#hokensync-content > .hokensync-editor-head { animation: none; }
+
+.hokensync-editor-head #hokensync-status {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    margin: 0;
+}
+
+/* Вкладки «Свой текст» / «Найденный текст»: активная раскрывается, значок оживает. */
+.hokensync-tabs {
+    --tab-accent: #c19aff;
+    --tab-ink: #eee7f7;
+    --tab-muted: #827a90;
+    --tab-h: 40px;
+    --tab-icon: 22px;
+    flex: 0 0 360px;
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 20px 20px 24px 24px;
+    background: #151519;
+    box-shadow:
+        inset 0 1.5px 0 #29272f,
+        0 9px 26px #00000014;
+    color: var(--tab-ink);
+}
+
+.hokensync-tab {
+    position: relative;
+    flex: 1 0 auto;
+    min-height: var(--tab-h);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 15px;
+    background: transparent;
+    color: var(--tab-muted);
+    font: inherit;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        flex-grow .48s cubic-bezier(.2, .85, .25, 1),
+        color .28s ease,
+        background .3s ease,
+        border-color .3s ease,
+        border-radius .38s ease;
+}
+
+.hokensync-tab.active {
+    flex-grow: 1.18;
+    color: var(--tab-accent);
+    border-color: #453650;
+    border-radius: 17px 12px 17px 12px;
+    background: linear-gradient(115deg, #2d2438 0%, #24212b 80%);
+    box-shadow:
+        inset 0 1px 0 #ffffff09,
+        0 3px 13px #0000001a;
+    cursor: default;
+}
+
+.hokensync-tab.active:hover {
+    border-color: #644879;
+    background: linear-gradient(115deg, #352740 0%, #29222f 80%);
+}
+
+.hokensync-tab:focus-visible {
+    outline: 2px solid #b38aee;
+    outline-offset: 3px;
+}
+
+.hokensync-tab-icon {
+    display: block;
+    width: var(--tab-icon);
+    height: var(--tab-icon);
+    flex: 0 0 var(--tab-icon);
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform .32s cubic-bezier(.2, .8, .2, 1);
+}
+
+.hokensync-tab.active .hokensync-tab-icon { filter: drop-shadow(0 0 5px #b17af51c); }
+
+.hokensync-tab-label {
+    flex: none;
+    color: #92899e;
+    font-size: 12.5px;
+    font-weight: 540;
+    letter-spacing: -.23px;
+    transition: color .25s ease, transform .38s cubic-bezier(.2, .8, .2, 1);
+}
+
+.hokensync-tab.active .hokensync-tab-label {
+    color: #f0e8fb;
+    transform: translateY(-.5px);
+}
+
+/* Иконка найденного текста. */
+.hokensync-scan-line {
+    opacity: 0;
+    stroke-dasharray: 9;
+    stroke-dashoffset: 9;
+    transform: translateY(-3px);
+}
+
+.hokensync-lens {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.hokensync-doc-lines { opacity: .68; }
+
+/* Иконка собственного текста. */
+.hokensync-pen {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.hokensync-write-trace {
+    opacity: 0;
+    stroke-dasharray: 7;
+    stroke-dashoffset: 7;
+}
+
+/* Анимация значка идёт только у выбранной вкладки (класс playing ставится из кода). */
+.hokensync-tab.playing .hokensync-scan-line { animation: hs-tabicon-scan .78s cubic-bezier(.25, .7, .25, 1) both; }
+.hokensync-tab.playing .hokensync-lens { animation: hs-tabicon-lens .78s cubic-bezier(.2, .8, .25, 1) both; }
+.hokensync-tab.playing .hokensync-doc-lines { animation: hs-tabicon-doc .78s ease both; }
+.hokensync-tab.playing .hokensync-pen { animation: hs-tabicon-pen .78s cubic-bezier(.2, .8, .25, 1) both; }
+.hokensync-tab.playing .hokensync-write-trace { animation: hs-tabicon-write .78s ease both; }
+
+@keyframes hs-tabicon-scan {
+    0%, 100% { opacity: 0; stroke-dashoffset: 9; transform: translateY(-3px); }
+    18% { opacity: .95; }
+    55% { opacity: .95; stroke-dashoffset: 0; transform: translateY(5px); }
+    79% { opacity: .65; stroke-dashoffset: 0; transform: translateY(5px); }
+}
+
+@keyframes hs-tabicon-lens {
+    0%, 100% { transform: none; }
+    28% { transform: translate(-1px, -2px) rotate(-11deg); }
+    58% { transform: translate(1px, 1px) rotate(6deg); }
+    78% { transform: none; }
+}
+
+@keyframes hs-tabicon-doc {
+    0%, 100% { opacity: .68; }
+    42%, 64% { opacity: 1; }
+}
+
+@keyframes hs-tabicon-pen {
+    0%, 100% { transform: none; }
+    30% { transform: translate(1px, -1px) rotate(-10deg); }
+    57% { transform: translate(-.5px, .5px) rotate(5deg); }
+    79% { transform: none; }
+}
+
+@keyframes hs-tabicon-write {
+    0%, 100% { opacity: 0; stroke-dashoffset: 7; }
+    35%, 68% { opacity: .9; stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hokensync-tab,
+    .hokensync-tab-icon,
+    .hokensync-tab-label { transition-duration: .01ms !important; }
+
+    .hokensync-tab.playing .hokensync-scan-line,
+    .hokensync-tab.playing .hokensync-lens,
+    .hokensync-tab.playing .hokensync-doc-lines,
+    .hokensync-tab.playing .hokensync-pen,
+    .hokensync-tab.playing .hokensync-write-trace { animation: none !important; }
+}
+
+/* Общие кадры для переливающихся фиолетовых кнопок (.hokensync-btn.primary). Не удалять. */
+@keyframes hs-tab-flow { to { background-position: -200% 0; } }
+
+@keyframes hs-tab-sheen {
+    0%, 55% { transform: translateX(-160%) skewX(-20deg); }
+    100% { transform: translateX(380%) skewX(-20deg); }
+}
+
+/* Переключение вкладок: старое содержимое уходит в сторону, новое выезжает с другой стороны. */
+#hokensync-content > .hokensync-leave-left {
+    animation: hs-leave-left .14s ease-in both;
+    pointer-events: none;
+}
+
+#hokensync-content > .hokensync-leave-right {
+    animation: hs-leave-right .14s ease-in both;
+    pointer-events: none;
+}
+
+#hokensync-content > .hokensync-slide-from-right { animation: hs-slide-from-right .38s cubic-bezier(.22, 1, .36, 1) both; }
+#hokensync-content > .hokensync-slide-from-left { animation: hs-slide-from-left .38s cubic-bezier(.22, 1, .36, 1) both; }
+
+/* Кнопки внизу появляются чуть позже поля: получается волна, а не один блок. */
+#hokensync-content > #hokensync-buttons.hokensync-slide-from-right,
+#hokensync-content > #hokensync-buttons.hokensync-slide-from-left { animation-delay: .06s; }
+
+@keyframes hs-leave-left { to { opacity: 0; transform: translateX(-24px); } }
+@keyframes hs-leave-right { to { opacity: 0; transform: translateX(24px); } }
+
+@keyframes hs-slide-from-right {
+    from { opacity: 0; transform: translateX(28px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes hs-slide-from-left {
+    from { opacity: 0; transform: translateX(-28px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* Вкладки «Мои тексты»: Свои / Найденные / Все. */
+.hokensync-navtab {
+    --nt-duration: .45s;
+    --nt-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    /* Скорость анимации значков: 1 — как задумано, 1.5 — медленнее, 0.7 — быстрее. */
+    --nt-slow: 1;
+    /* Активная вкладка шире неактивных в 2.7 раза: итого 1 + 1 + 2.7. Числа должны совпадать с flex-grow ниже. */
+    --nt-grow: 2.7;
+    --nt-total: 4.7;
+    position: relative;
+    align-self: flex-start;
+    display: flex;
+    width: min(380px, 100%);
+    height: 48px;
+    box-sizing: border-box;
+    margin: 0 0 12px;
+    overflow: hidden;
+    border: 1px solid var(--hs-line);
+    border-radius: 14px;
+    background: var(--hs-surface);
+    user-select: none;
+}
+
+.hokensync-navtab-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0 0 8px;
+    border: 0;
+    background: transparent;
+    color: var(--hs-faint);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: flex-grow var(--nt-duration) var(--nt-ease), color .25s ease;
+}
+
+.hokensync-navtab-item:hover { color: var(--hs-text); }
+
+.hokensync-navtab-item.active {
+    flex-grow: var(--nt-grow);
+    color: var(--hs-accent);
+    cursor: default;
+}
+
+.hokensync-navtab-item:focus-visible {
+    outline: 2px solid var(--hs-accent);
+    outline-offset: -3px;
+}
+
+.hokensync-navtab__svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Подпись есть только у выбранной вкладки: раскрывается вместе с ней. */
+.hokensync-navtab__txt {
+    max-width: 0;
+    margin-left: 0;
+    overflow: hidden;
+    opacity: 0;
+    text-overflow: ellipsis;
+    transition:
+        max-width var(--nt-duration) var(--nt-ease),
+        margin-left var(--nt-duration) var(--nt-ease),
+        opacity .25s ease;
+}
+
+.hokensync-navtab-item.active .hokensync-navtab__txt {
+    max-width: 150px;
+    margin-left: 9px;
+    opacity: 1;
+}
+
+.hokensync-navtab__label {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* Число текстов: плашка, а не часть названия. */
+.hokensync-navtab__count {
+    display: inline-block;
+    margin-left: 7px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--hs-accent) 18%, transparent);
+    color: var(--hs-accent);
+    font-size: 11.5px;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.hokensync-navtab__count:empty { display: none; }
+
+/* Линия под выбранной вкладкой: едет и меняет ширину вместе с раздвижением вкладок. */
+.hokensync-navtab__line {
+    position: absolute;
+    bottom: 9px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--hs-accent);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    pointer-events: none;
+    transition:
+        left var(--nt-duration) var(--nt-ease),
+        width var(--nt-duration) var(--nt-ease);
+}
+
+/* ===== Анимация самих значков: запускается, когда вкладка становится выбранной ===== */
+
+/* Исходное состояние (у неактивной вкладки значок нарисован целиком). */
+.hs-nt-ink, .hs-nt-spark, .hs-nt-ring { opacity: 0; }
+.hs-nt-ring { fill: none; }
+.hs-nt-ink, .hs-nt-b { fill: currentColor; stroke: none; }
+.hs-nt-pen-body { fill: var(--hs-surface); }
+.hs-nt-lens-glass { fill: var(--hs-surface); fill-opacity: .72; }
+.hs-nt-track { opacity: .3; }
+.hs-nt-thumb { stroke-width: 2.2; }
+.hs-nt-ink, .hs-nt-spark, .hs-nt-ring, .hs-nt-b, .hs-nt-doc, .hs-nt-lens {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+/* ---- Свои: листок, строки, карандаш пишет, чернила ---- */
+.hokensync-navtab-item.active .hs-nt-doc { animation: hs-nt-doc-in calc(.7s * var(--nt-slow)) var(--nt-ease) both; }
+.hokensync-navtab-item.active .hs-nt-l1 { animation: hs-nt-draw calc(.5s * var(--nt-slow)) ease calc(.3s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-l2 { animation: hs-nt-draw calc(.5s * var(--nt-slow)) ease calc(.6s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-l3 { animation: hs-nt-draw calc(.9s * var(--nt-slow)) ease-in-out calc(.95s * var(--nt-slow)) both; }
+
+.hokensync-navtab-item.active .hs-nt-pen-move {
+    animation: hs-nt-pen-move calc(.9s * var(--nt-slow)) ease-in-out calc(.95s * var(--nt-slow)) both;
+}
+
+.hokensync-navtab-item.active .hs-nt-pen {
+    transform-origin: 7px 16.5px;
+    animation: hs-nt-pen-write calc(1.6s * var(--nt-slow)) ease-in-out calc(.95s * var(--nt-slow)) both;
+}
+
+.hokensync-navtab-item.active .hs-nt-ink1 { animation: hs-nt-pop calc(.5s * var(--nt-slow)) ease-out calc(2.0s * var(--nt-slow)) forwards; }
+.hokensync-navtab-item.active .hs-nt-ink2 { animation: hs-nt-pop calc(.5s * var(--nt-slow)) ease-out calc(2.1s * var(--nt-slow)) forwards; }
+.hokensync-navtab-item.active .hs-nt-ink3 { animation: hs-nt-pop calc(.5s * var(--nt-slow)) ease-out calc(2.2s * var(--nt-slow)) forwards; }
+
+/* ---- Найденные: лупа сканирует строки, находит, кольцо и искорки ---- */
+.hokensync-navtab-item.active .hs-nt-lens-move { animation: hs-nt-lens-move calc(2.6s * var(--nt-slow)) ease-in-out both; }
+.hokensync-navtab-item.active .hs-nt-lens { animation: hs-nt-lens-pulse calc(2.6s * var(--nt-slow)) ease-in-out both; }
+
+.hokensync-navtab-item.active .hs-nt-fl1 { animation: hs-nt-hl calc(.5s * var(--nt-slow)) ease calc(.65s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-fl3 { animation: hs-nt-hl calc(.5s * var(--nt-slow)) ease calc(1.5s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-fl2 {
+    animation:
+        hs-nt-hl calc(.5s * var(--nt-slow)) ease calc(1.08s * var(--nt-slow)) both,
+        hs-nt-found calc(.5s * var(--nt-slow)) ease calc(1.95s * var(--nt-slow)) forwards;
+}
+
+.hokensync-navtab-item.active .hs-nt-ring { animation: hs-nt-ring calc(.8s * var(--nt-slow)) ease-out calc(2.0s * var(--nt-slow)) forwards; }
+.hokensync-navtab-item.active .hs-nt-sparkA { animation: hs-nt-pop calc(.55s * var(--nt-slow)) ease-out calc(2.1s * var(--nt-slow)) forwards; }
+.hokensync-navtab-item.active .hs-nt-sparkB { animation: hs-nt-pop calc(.55s * var(--nt-slow)) ease-out calc(2.3s * var(--nt-slow)) forwards; }
+
+/* ---- Все: маркеры выпрыгивают, строки дорисовываются, список прокручивается ---- */
+.hokensync-navtab-item.active .hs-nt-b1 { animation: hs-nt-pop calc(.5s * var(--nt-slow)) cubic-bezier(.3, 1.6, .5, 1) both; }
+.hokensync-navtab-item.active .hs-nt-b2 { animation: hs-nt-pop calc(.5s * var(--nt-slow)) cubic-bezier(.3, 1.6, .5, 1) calc(.25s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-b3 { animation: hs-nt-pop calc(.5s * var(--nt-slow)) cubic-bezier(.3, 1.6, .5, 1) calc(.5s * var(--nt-slow)) both; }
+
+.hokensync-navtab-item.active .hs-nt-row1 { animation: hs-nt-draw calc(.55s * var(--nt-slow)) ease calc(.1s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-row2 { animation: hs-nt-draw calc(.55s * var(--nt-slow)) ease calc(.35s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-row3 { animation: hs-nt-draw calc(.55s * var(--nt-slow)) ease calc(.6s * var(--nt-slow)) both; }
+
+.hokensync-navtab-item.active .hs-nt-list { animation: hs-nt-scroll-list calc(1.4s * var(--nt-slow)) ease-in-out calc(1.3s * var(--nt-slow)) both; }
+.hokensync-navtab-item.active .hs-nt-thumb { animation: hs-nt-scroll-thumb calc(1.4s * var(--nt-slow)) ease-in-out calc(1.3s * var(--nt-slow)) both; }
+
+/* ---- Общие кадры ---- */
+@keyframes hs-nt-draw {
+    from { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    to { stroke-dasharray: 1; stroke-dashoffset: 0; }
+}
+
+@keyframes hs-nt-pop {
+    0% { opacity: 0; transform: scale(0); }
+    60% { opacity: 1; transform: scale(1.35); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hs-nt-doc-in {
+    from { opacity: .2; transform: scale(.86); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes hs-nt-pen-move {
+    from { transform: translateX(0); }
+    to { transform: translateX(8px); }
+}
+
+@keyframes hs-nt-pen-write {
+    0% { transform: rotate(8deg); }
+    14% { transform: rotate(-4deg); }
+    28% { transform: rotate(3deg); }
+    42% { transform: rotate(-4deg); }
+    56% { transform: rotate(3deg); }
+    70% { transform: rotate(-3deg); }
+    100% { transform: rotate(-9deg) translateY(-1px); }
+}
+
+@keyframes hs-nt-lens-move {
+    0%, 8% { transform: none; }
+    26% { transform: translate(-6px, -6px); }
+    42% { transform: translate(-6.5px, -3px); }
+    58% { transform: translate(-6.5px, .5px); }
+    76% { transform: translate(-6.5px, -3px); }
+    100% { transform: none; }
+}
+
+@keyframes hs-nt-lens-pulse {
+    0%, 70% { transform: scale(1); }
+    78% { transform: scale(1.18); }
+    90%, 100% { transform: scale(1); }
+}
+
+@keyframes hs-nt-hl {
+    0%, 100% { stroke-width: 1.8; }
+    50% { stroke-width: 2.9; }
+}
+
+@keyframes hs-nt-found {
+    from { stroke-width: 1.8; }
+    to { stroke-width: 2.7; }
+}
+
+@keyframes hs-nt-ring {
+    from { opacity: .9; transform: scale(1); }
+    to { opacity: 0; transform: scale(2.1); }
+}
+
+@keyframes hs-nt-scroll-list {
+    0%, 100% { transform: none; }
+    45%, 55% { transform: translateY(-2px); }
+}
+
+@keyframes hs-nt-scroll-thumb {
+    0%, 100% { transform: none; }
+    45%, 55% { transform: translateY(9px); }
+}
+
+/* Учитываем настройку «уменьшить анимацию» в системе */
+@media (prefers-reduced-motion: reduce) {
+    .hokensync-navtab,
+    .hokensync-navtab * {
+        animation: none !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+/* Найденные тексты в «Мои тексты»: голубой оттенок, чтобы отличать от своих. */
+.hokensync-saved-lyrics-row.hokensync-saved-found {
+    border-color: color-mix(in srgb, var(--hs-info) 26%, transparent);
+    background: color-mix(in srgb, var(--hs-info) 7%, var(--hs-surface));
+}
+
+.hokensync-saved-lyrics-row.hokensync-saved-found:hover {
+    border-color: color-mix(in srgb, var(--hs-info) 45%, transparent);
+    background: color-mix(in srgb, var(--hs-info) 12%, var(--hs-raised));
+}
+
+.hokensync-saved-found .hokensync-saved-lyrics-icon {
+    background: color-mix(in srgb, var(--hs-info) 14%, var(--hs-raised));
+    color: var(--hs-info);
+}
+
+.hokensync-saved-found .hokensync-saved-lyrics-artist {
+    color: color-mix(in srgb, var(--hs-info) 70%, var(--hs-faint));
+}
+
+.hokensync-saved-found .hokensync-btn.hokensync-saved-lyrics-download:hover {
+    border-color: color-mix(in srgb, var(--hs-info) 40%, transparent);
+    background: color-mix(in srgb, var(--hs-info) 14%, transparent);
+    color: var(--hs-info);
+}
+
+/* Экран «Выбор версии текста». */
+.hokensync-version {
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--hs-line);
+    border-radius: 13px;
+    background: var(--hs-surface);
+    transition: background .15s ease, border-color .15s ease;
+}
+
+.hokensync-version:hover {
+    border-color: var(--hs-line-strong);
+    background: var(--hs-raised);
+}
+
+.hokensync-version.current { border-color: color-mix(in srgb, var(--hs-accent) 40%, transparent); }
+
+.hokensync-version-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hokensync-version-num {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--hs-accent) 16%, transparent);
+    color: var(--hs-accent);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.hokensync-version-name {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    color: var(--hs-text);
+    font-size: 14px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hokensync-version-tag {
+    flex: 0 0 auto;
+    padding: 3px 9px;
+    border: 1px solid color-mix(in srgb, var(--hs-accent) 35%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--hs-accent) 14%, transparent);
+    color: var(--hs-accent);
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.hokensync-version-origin {
+    margin: 4px 0 0 32px;
+    color: var(--hs-faint);
+    font-size: 12px;
+}
+
+.hokensync-version-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.hokensync-version-chip {
+    padding: 3px 9px;
+    border: 1px solid var(--hs-line-strong);
+    border-radius: 999px;
+    color: var(--hs-muted);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.hokensync-version-chip.ok {
+    border-color: color-mix(in srgb, var(--hs-ok) 35%, transparent);
+    background: color-mix(in srgb, var(--hs-ok) 10%, transparent);
+    color: var(--hs-ok);
+}
+
+.hokensync-version-chip.warn {
+    border-color: color-mix(in srgb, var(--hs-warn) 35%, transparent);
+    background: color-mix(in srgb, var(--hs-warn) 10%, transparent);
+    color: var(--hs-warn);
+}
+
+.hokensync-version-preview {
+    margin-top: 10px;
+    color: var(--hs-muted);
+    font-size: 12.5px;
+    line-height: 1.5;
+}
+
+.hokensync-version-paren { color: var(--hs-warn); }
+
+.hokensync-version-diff {
+    margin-top: 8px;
+    color: var(--hs-faint);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.hokensync-version-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+/* Подробное сравнение версий: какие строки отличаются и где. */
+.hokensync-version-toggle {
+    margin: 8px 0 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--hs-accent);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.hokensync-version-toggle:hover { text-decoration: underline; }
+
+.hokensync-version-diffbox {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--hs-line);
+    border-radius: 11px;
+    background: var(--hs-bg);
+}
+
+.hokensync-version-diffbox[hidden] { display: none; }
+
+.hokensync-diff-note {
+    color: var(--hs-faint);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.hokensync-diff-hunk {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--hs-line);
+}
+
+.hokensync-diff-where {
+    margin-bottom: 6px;
+    color: var(--hs-muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.hokensync-diff-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 2px;
+    padding: 3px 8px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.hokensync-diff-row.del { background: color-mix(in srgb, var(--hs-bad) 10%, transparent); }
+.hokensync-diff-row.add { background: color-mix(in srgb, var(--hs-ok) 10%, transparent); }
+
+.hokensync-diff-mark {
+    flex: 0 0 10px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.hokensync-diff-row.del .hokensync-diff-mark { color: var(--hs-bad); }
+.hokensync-diff-row.add .hokensync-diff-mark { color: var(--hs-ok); }
+
+.hokensync-diff-who {
+    flex: 0 0 auto;
+    min-width: 26px;
+    color: var(--hs-faint);
+    font-size: 11.5px;
+    font-weight: 600;
+}
+
+.hokensync-diff-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: var(--hs-text);
+}
+
+.hokensync-diff-row.del .hokensync-diff-word {
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--hs-bad) 30%, transparent);
+}
+
+.hokensync-diff-row.add .hokensync-diff-word {
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--hs-ok) 30%, transparent);
+}
+
+.hokensync-diff-more {
+    margin-top: 6px;
+    color: var(--hs-faint);
+    font-size: 12px;
+}
+
+/* Кнопка удаления в строке «Мои тексты». */
+.hokensync-btn.hokensync-saved-lyrics-delete {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    padding: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--hs-muted);
+}
+
+.hokensync-btn.hokensync-saved-lyrics-delete:hover {
+    border-color: color-mix(in srgb, var(--hs-bad) 40%, transparent);
+    background: color-mix(in srgb, var(--hs-bad) 16%, transparent);
+    color: #ffb7c0;
+}
+
+.hokensync-saved-lyrics-delete svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Панель «Сместить все таймкоды» на экране правки. */
+#hokensync-shift-panel {
+    width: min(var(--hs-col), 100%);
+    align-self: center;
+    box-sizing: border-box;
+    margin: 0 0 12px;
+    padding: 12px 14px;
+    border: 1px solid color-mix(in srgb, var(--hs-accent) 30%, transparent);
+    border-radius: 13px;
+    background: color-mix(in srgb, var(--hs-accent) 7%, var(--hs-surface));
+}
+
+#hokensync-shift-panel[hidden] { display: none; }
+
+.hokensync-shift-title {
+    color: var(--hs-text);
+    font-size: 13.5px;
+    font-weight: 650;
+}
+
+.hokensync-shift-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.hokensync-shift-row .hokensync-btn {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12.5px;
+}
+
+.hokensync-shift-input {
+    width: 96px;
+    flex: 0 0 96px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.hokensync-shift-unit {
+    color: var(--hs-faint);
+    font-size: 13px;
+}
+
+.hokensync-shift-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.hokensync-shift-info {
+    margin-top: 10px;
+    color: var(--hs-muted);
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.hokensync-shift-info.bad { color: var(--hs-bad); }
+.hokensync-shift-info.warn { color: var(--hs-warn); }
+
+/* Вкладка «Найденный текст»: текст переделан в свой. */
+.hokensync-converted-note {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 32px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.hokensync-converted-title {
+    color: var(--hs-text);
+    font-size: 16px;
+    font-weight: 650;
+}
+
+.hokensync-converted-text {
+    max-width: 420px;
+    color: var(--hs-muted);
+    font-size: 13.5px;
+    line-height: 1.5;
+}
+
+/* Кнопка «Ещё действия» (три точки): внизу экранов вместо ряда кнопок. */
+.hokensync-btn.hokensync-more-btn {
+    width: 38px;
+    min-width: 38px;
+    flex: 0 0 38px;
+    padding: 0;
+    color: var(--hs-muted);
+}
+
+.hokensync-btn.hokensync-more-btn:hover { color: var(--hs-text); }
+
+.hokensync-more-btn svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    stroke: none;
+}
+
+/* Пока открыто меню, кнопка подсвечена (как у «+» и «Метка»). */
+.hokensync-more-btn.is-open {
+    border-color: color-mix(in srgb, var(--hs-accent) 55%, transparent);
+    background: color-mix(in srgb, var(--hs-accent) 20%, transparent);
+    color: var(--hs-accent);
+}
+
+/* ===== Меню дополнительных действий: жидкое стекло, пункты появляются по очереди ===== */
+.hokensync-menu.hokensync-menu-fancy {
+    min-width: 236px;
+    padding: 8px;
+    border-radius: 16px;
+    transform-origin: left bottom;
+    transform: translateY(10px) scale(.9);
+    transition: opacity .2s ease, transform .42s cubic-bezier(.2, 1.25, .3, 1);
+}
+
+@keyframes hs-menu-item-in {
+    from { opacity: 0; transform: translateY(10px) scale(.96); }
+    to { opacity: 1; transform: none; }
+}
+
+.hokensync-menu-fancy .hokensync-menu-separator {
+    margin: 6px 10px;
+    background: rgba(255, 255, 255, .12);
+}
+
+/* Значки пунктов: без анимации */
+.hokensync-menu-num.hokensync-menu-icon {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    background: transparent;
+    color: rgba(255, 255, 255, .88);
+}
+
+.hokensync-menu-icon svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.hokensync-menu-fancy .hokensync-menu-item.danger { color: #ffb7c0; }
+.hokensync-menu-fancy .hokensync-menu-item.danger .hokensync-menu-icon { color: var(--hs-bad); }
+.hokensync-menu-fancy .hokensync-menu-item.danger:hover { background: color-mix(in srgb, var(--hs-bad) 24%, transparent); }
+
+/* Анимация только у значка «⋯» на кнопке: при открытии меню он поворачивается, а точки по очереди подпрыгивают */
+.hokensync-more-btn svg { transition: transform .4s var(--hs-ease); }
+.hokensync-more-btn.is-open svg { transform: rotate(90deg); }
+
+.hokensync-more-btn circle {
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.hokensync-more-btn.is-open circle { animation: hs-more-dot .55s ease both; }
+.hokensync-more-btn.is-open circle:nth-child(2) { animation-delay: .09s; }
+.hokensync-more-btn.is-open circle:nth-child(3) { animation-delay: .18s; }
+
+@keyframes hs-more-dot {
+    0%, 100% { transform: scale(1); }
+    45% { transform: scale(1.75); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hokensync-menu-fancy,
+    .hokensync-menu-fancy *,
+    .hokensync-more-btn svg,
+    .hokensync-more-btn circle {
+        animation: none !important;
+        transition-duration: .01ms !important;
+    }
+
+    .hokensync-menu-fancy .hokensync-menu-item { opacity: 1; }
+}
+
+/* «Мои тексты»: нажатие на строку включает песню, на обложке при наведении появляется «играть». */
+.hokensync-saved-lyrics-icon { position: relative; }
+
+.hokensync-saved-playable { cursor: pointer; }
+
+.hokensync-saved-playable .hokensync-saved-lyrics-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 11, 16, .6);
+    opacity: 0;
+    transition: opacity .18s ease;
+}
+
+.hokensync-saved-playable .hokensync-saved-lyrics-icon::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.7);
+    transition: opacity .18s ease, transform .25s var(--hs-ease);
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M8 5.2v13.6a1 1 0 0 0 1.5.9l11-6.8a1 1 0 0 0 0-1.7l-11-6.8A1 1 0 0 0 8 5.2z'/></svg>") center / contain no-repeat;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M8 5.2v13.6a1 1 0 0 0 1.5.9l11-6.8a1 1 0 0 0 0-1.7l-11-6.8A1 1 0 0 0 8 5.2z'/></svg>") center / contain no-repeat;
+}
+
+.hokensync-saved-playable:hover .hokensync-saved-lyrics-icon::before { opacity: 1; }
+
+.hokensync-saved-playable:hover .hokensync-saved-lyrics-icon::after {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Кнопка HokenSync в полноэкранном плеере: левый верхний угол. Отступы подгони двумя числами. */
+.hokensync-fs-open {
+    --fs-top: 22px;
+    --fs-left: 22px;
+    position: fixed !important;
+    top: var(--fs-top);
+    left: var(--fs-left);
+    right: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+    z-index: 20;
+}
+
+[data-hokensync-fullscreen] {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}
+
+[data-hokensync-fullscreen] svg {
+    filter: drop-shadow(0 0 3px rgba(255, 170, 80, .7));
+    transition: filter .2s ease, transform .2s ease;
+}
+
+[data-hokensync-fullscreen]:hover svg {
+    filter: brightness(1.3) drop-shadow(0 0 6px rgba(255, 210, 140, .95));
+    transform: scale(1.06);
+}/*$vite$:1*/
