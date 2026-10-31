@@ -1,0 +1,95 @@
+{
+    "sections": [
+        {
+            "title": "Общие",
+            "items": [
+                {
+                    "id": "language",
+                    "name": "Язык / Language / 语言",
+                    "description": "Язык интерфейса HokenSync",
+                    "type": "selector",
+                    "value": 1,
+                    "options": {
+                        "1": { "event": "ru", "name": "Русский" },
+                        "2": { "event": "en", "name": "English" },
+                        "3": { "event": "zh", "name": "中文" }
+                    },
+                    "defaultValue": 1
+                }
+            ]
+        },
+        {
+            "title": "Перемотка",
+            "items": [
+                {
+                    "id": "seekStepSync",
+                    "name": "Шаг перемотки при разметке",
+                    "description": "На сколько секунд стрелки ← / → и кнопки −/+ двигают песню при разметке таймкодов",
+                    "type": "slider",
+                    "min": 1,
+                    "max": 10,
+                    "step": 1,
+                    "value": 3,
+                    "defaultValue": 3
+                },
+                {
+                    "id": "seekStepBreak",
+                    "name": "Шаг перемотки при выборе проигрыша",
+                    "description": "На сколько секунд стрелки ← / → и кнопки −/+ двигают песню на экране проигрыша",
+                    "type": "slider",
+                    "min": 1,
+                    "max": 15,
+                    "step": 1,
+                    "value": 5,
+                    "defaultValue": 5
+                }
+            ]
+        },
+        {
+            "title": "Горячие клавиши",
+            "items": [
+                {
+                    "id": "hotkeyOpen",
+                    "name": "Открыть HokenSync",
+                    "description": "Например: Ctrl+Alt+L. Модификаторы Ctrl, Alt, Shift и одна буква или цифра",
+                    "type": "text",
+                    "value": "Ctrl+Alt+L",
+                    "defaultValue": "Ctrl+Alt+L"
+                },
+                {
+                    "id": "hotkeyLabelMenu",
+                    "name": "Меню «Метка» в редакторе текста",
+                    "description": "Например: Alt+S. Модификаторы Ctrl, Alt, Shift и одна буква или цифра",
+                    "type": "text",
+                    "value": "Alt+S",
+                    "defaultValue": "Alt+S"
+                }
+            ]
+        },
+        {
+            "title": "Внешний вид",
+            "items": [
+                {
+                    "id": "windowStyle",
+                    "name": "Фон меню и подсказок",
+                    "description": "Жидкое стекло или обычный фон цвета Яндекс Музыки",
+                    "type": "selector",
+                    "value": 2,
+                    "options": {
+                        "1": { "event": "normal", "name": "Обычный" },
+                        "2": { "event": "glass", "name": "Жидкий" }
+                    },
+                    "defaultValue": 2
+                },
+                {
+                    "id": "disableAnimations",
+                    "name": "Отключить анимации",
+                    "description": "Убирает анимации окна, кнопок и уведомлений. Помогает, если интерфейс притормаживает",
+                    "type": "button",
+                    "value": false,
+                    "defaultValue": false
+                }
+            ]
+        }
+    ]
+}
